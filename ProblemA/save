@@ -1,0 +1,274 @@
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <vector>
+using namespace std;
+
+
+
+
+// maximum number of rotations
+int best = 13;
+
+// number of rows, columns and total moves
+int r,c,m;
+
+// vector of 2D arrays, storing previous states of the grid.
+vector<int**> patterns;
+
+void print_grid(int **grid)
+{
+    for(int i = 0; i < r; i++)
+    {
+        for(int j = 0; j < c; j++)
+        {
+            cout << grid[i][j] << " ";
+        }
+        cout << "\n";
+    }
+    cout << "\n";
+}
+
+int** shallowCopy(int **original) {
+    int** copy = new int*[r];
+
+    for (int i = 0; i < r; ++i) {
+        copy[i] = new int[c];
+        for (int j = 0; j < c; ++j) {
+            copy[i][j] = original[i][j];
+        }
+    }
+    return copy;
+}
+
+
+
+void rotate_left(int **grid,int**copy,int x,int y,int n)
+{
+    //(0,1)
+
+    int temp = grid[0+x][0+y];
+    for(int i = 0; i < n; i++)
+    {
+        if(i == 0)
+        {
+            copy[0+x][0+y] = grid[0+x][1+y];
+            copy[0+x][1+y] = grid[1+x][1+y];
+            copy[1+x][1+y] = grid[1+x][0+y];
+            copy[1+x][0+y] = temp;
+        }
+        else
+        {
+            temp = copy[0+x][0+y];
+            copy[0+x][0+y] = copy[0+x][1+y];
+            copy[0+x][1+y] = copy[1+x][1+y];
+            copy[1+x][1+y] = copy[1+x][0+y];
+            copy[1+x][0+y] = temp;
+        }
+
+    }
+}
+
+void rotate_right(int **grid,int**copy,int x,int y,int n)
+{
+    int temp = grid[0+x][0+y];
+    for(int i = 0; i < n; i++)
+    {
+        if(i == 0)
+        {
+            copy[0+x][0+y] = grid[1+x][0+y];
+            copy[1+x][0+y] = grid[1+x][1+y];
+            copy[1+x][1+y] = grid[0+x][1+y];
+            copy[0+x][1+y] = temp;
+        }
+        else
+        {
+            temp = copy[0+x][0+y];
+            copy[0+x][0+y] = copy[1+x][0+y];
+            copy[1+x][0+y] = copy[1+x][1+y];
+            copy[1+x][1+y] = copy[0+x][1+y];
+            copy[0+x][1+y] = temp;
+        }
+    }
+}
+
+/*
+void cleanup()
+{
+    cout << patterns.size() << "\n";
+    for(int i = 2; i < patterns.size(); i++)
+    {
+        for(int j = 0; j < r; j++)
+        {
+            delete[] patterns[i][j];
+        }
+    }
+    delete[] patterns[0];
+}
+*/
+void clear_grid(int **grid)
+{
+    for(int j = 0; j < r; j++)
+    {
+        delete[] grid[j];
+    }
+    delete[] grid;
+}
+int check_grid(int **grid)
+{
+    //checks if pattern is sorted by line
+    for(int i = 1; i < r;i++)
+    {
+        if(grid[i-1][0] > grid[i][0]) return 0;
+    }
+
+    //checks if all lines are full
+    for(int i = 0; i < r;i++)
+    {
+        for(int j = 0; j < c;j++)
+        {
+            if(grid[i][0] != grid[i][j]) return 0;
+        }
+    }
+    return 1;
+}
+
+int test(int** grid,int x,int y,int moves)
+{
+    int **temp;
+    int increment;
+    for(int i = 0; i < r-1; i++)
+    {
+        for(int j = 0; j < c-1; j++)
+        {
+            increment = 1;
+            if(i != x || j != y)
+            {
+
+            }
+
+        }
+    }
+    return 0;
+}
+
+//criar função para verificar se um dado padrão já se apresentou antes
+
+int recursive_tries(int **grid,int moves)
+{
+    //number of handles for 2x2 grid = (columns-1) x (rows-1)
+
+    int **temp = shallowCopy(grid);
+    //grid is already solved
+
+    int increment = 1;
+    for(int i = 0; i < r-1; i++)
+    {
+        for(int j = 0; j < c-1; j++)
+        {
+            rotate_left(grid,temp,i,j,moves+increment);
+            if(check_grid(temp))
+            {
+                clear_grid(temp);
+                return 1;
+            }
+            else
+            {
+                test
+            }
+
+        }
+    }
+
+
+    return 0;
+
+    /*
+    //number of handles for 2x2 grid = (columns-1) x (rows-1)
+    //int x_handle = r-1;
+    int **temp;
+    //grid is already solved
+    if(check_grid(grid))
+    {
+        if(moves < best) best = moves;
+        //cout << moves << "\n";
+        return 1;
+    }
+    if(moves >= m || moves >= best)
+    {
+        return 0;
+    }
+    //print_grid(grid);
+    patterns.push_back(grid);
+
+    //r-1 = 1  c-1 = 2
+    for(int i = 0; i < r-1; i++)
+    {
+        for(int j = 0; j < c-1; j++)
+        {
+            temp = rotate_left(grid,i,j);
+            recursive_tries(temp,moves+1);
+            temp = rotate_right(grid,i,j);
+            recursive_tries(temp,moves+1);
+        }
+    }
+    return 0;
+    */
+}
+
+
+void aztec_vault()
+{
+    // ! verificar se os blocos são todos iguais
+    // se os elementos na diagonal são iguais. só é necessário um movimento
+    // a primeira linha só deve ter 1s, 2ºa linha só 2s...
+
+    int count;
+
+
+    int** grid = new int*[r];
+    string input,dec;
+    getline(cin,input);
+
+    for(int i=0; i<r; i++)
+    {
+        grid[i] = new int[c];
+        getline(cin,input);
+        stringstream ss(input);
+        count = 0;
+        while (ss >> dec)
+        {
+            grid[i][count] = stoi(dec);
+            count++;
+        }
+    }
+    if(check_grid(grid)) best = 0;
+
+    //adding initial pattern
+    // patterns.push_back(grid);
+    recursive_tries(grid,0);
+
+}
+
+
+
+int main() {
+    std::ios_base::sync_with_stdio(0);
+    std::cin.tie(0);
+
+    int t;
+    cin >> t;
+    for(int i = 0; i < t; i++)
+    {
+        cin >> r >> c >> m;
+        if(r >= 2 && r <= 5 && c >= 2 && c <= 5 && r <= c && m >= 1 && m <= 7)
+        {
+            aztec_vault();
+            if(best > m) cout << "the treasure is lost!\n";
+            else cout << best << "\n";
+            best = 13;
+        }
+        else break;
+    }
+    return 0;
+}

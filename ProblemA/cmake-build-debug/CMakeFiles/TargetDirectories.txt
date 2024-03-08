@@ -1,0 +1,3 @@
+/Users/marcolucas/CLionProjects/EA/Problemas/ProblemA/cmake-build-debug/CMakeFiles/ProblemA.dir
+/Users/marcolucas/CLionProjects/EA/Problemas/ProblemA/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/marcolucas/CLionProjects/EA/Problemas/ProblemA/cmake-build-debug/CMakeFiles/rebuild_cache.dir
